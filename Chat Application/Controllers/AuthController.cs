@@ -1,8 +1,10 @@
 ﻿using Chat_Application.DTOs;
 using Chat_Application.Models;
 using Chat_Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 
 namespace Chat_Application.Controllers
@@ -11,45 +13,58 @@ namespace Chat_Application.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public static User user = new User();
+
         private readonly IUserService _userService;
+        private readonly IPasswordService _passwordService;
+        private readonly IJwtService _jwtService;
+
+        public static User db_response = new User();
 
 
-        public AuthController(IUserService userService)
+        public AuthController(IUserService userService, IPasswordService passwordService, IJwtService jwtService)
         {
             _userService = userService;
+            _passwordService = passwordService;
+            _jwtService = jwtService;
+
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)
         {
-            Console.WriteLine("Register Api called");
+            var db_response = await _userService.CheckUser(request);
 
-            user = await _userService.CheckUser(request);
-
-            if(user == null)
+            if(db_response.Data == null)
             {
-                Console.WriteLine("not found");
+                _passwordService.CreatePasswordHash(request.Password, out byte[] PasswordHash, out byte[] passwordSalt);
+                var response = await _userService.RegisterUser(request.Username, PasswordHash, passwordSalt);
+                return Ok(response.Data);
             }
             else
             {
-                Console.WriteLine(user.Username);
+                return NotFound(db_response.Error);
             }
-
-            CreatePasswordHash(request.Password, out byte[] PasswordHash, out byte[] passwordSalt);
-
-            user.PasswordHash = PasswordHash;
-            user.PasswordSalt = passwordSalt;
-            return user;
         }
 
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+
+        [HttpPost("login")]
+        public async Task<ActionResult<string>> Login(UserDto request)
         {
-            using (var hmac = new HMACSHA512())
+            var response = await _userService.LoginUser(request);
+            if(response.Data == null)
             {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return NotFound(response.Error);
             }
+            
+            if(!_passwordService.VerifyPasswordHash(request.Password, response.Data.PasswordHash, response.Data.PasswordSalt ))
+            {
+                return BadRequest("Wrong Password");
+            }
+            string jwt = _jwtService.CreateToken(response.Data);
+            return Ok(new {jwt, response.Data});
         }
+
+
+
     }
 }
