@@ -9,7 +9,7 @@ namespace Chat_Application.Services
     public interface IUserInfoService
     {
         Task<ServiceResponse<IEnumerable<User>>> GetAllUser();
-        Task<ServiceResponse<IEnumerable<MyChats>>> GetMyChats(int userId);
+        //Task<ServiceResponse<IEnumerable<MyChats>>> GetMyChats(int userId);
     }
     public class UserInfoService : IUserInfoService
     {
@@ -31,15 +31,17 @@ namespace Chat_Application.Services
             return response;
         }
 
-        public async Task<ServiceResponse<IEnumerable<MyChats>>> GetMyChats(int userId) {
-            var response = new ServiceResponse<IEnumerable<MyChats>>();
+        //public async Task<ServiceResponse<IEnumerable<MyChats>>> GetMyChats(int userId) {
+        //    var response = new ServiceResponse<IEnumerable<MyChats>>();
+        //    Console.WriteLine(userId);
+        //    response.Data = await _context.MyChats
+        //        .Where(c => c.ChatUserId == userId)
+        //        .Include(c => c.SingleChat)
+        //        .Include(c => c.GroupChat)
+        //        .ToListAsync();
 
-            response.Data = await _context.MyChats
-                .Where(mc => mc.ChatUserId == userId)
-                .ToListAsync();
-
-            return response;
-        }
+        //    return response;
+        //}
 
         // To delete a chat
 

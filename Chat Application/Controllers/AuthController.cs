@@ -1,4 +1,5 @@
-﻿using Chat_Application.DTOs;
+﻿using Azure;
+using Chat_Application.DTOs;
 using Chat_Application.Models;
 using Chat_Application.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -20,13 +21,11 @@ namespace Chat_Application.Controllers
 
         public static User db_response = new User();
 
-
         public AuthController(IUserService userService, IPasswordService passwordService, IJwtService jwtService)
         {
             _userService = userService;
             _passwordService = passwordService;
             _jwtService = jwtService;
-
         }
 
         [HttpPost("register")]
@@ -42,7 +41,7 @@ namespace Chat_Application.Controllers
             }
             else
             {
-                return NotFound(db_response.Error);
+                return NotFound(new { db_response.Error });
             }
         }
 
@@ -53,13 +52,15 @@ namespace Chat_Application.Controllers
             var response = await _userService.LoginUser(request);
             if(response.Data == null)
             {
-                return NotFound(response.Error);
+                return NotFound(new { response.Error });
             }
-            
-            if(!_passwordService.VerifyPasswordHash(request.Password, response.Data.PasswordHash, response.Data.PasswordSalt ))
+
+            var passwordResponse = _passwordService.VerifyPasswordHash(request.Password, response.Data.PasswordHash, response.Data.PasswordSalt);
+            if (!passwordResponse.Data)
             {
-                return BadRequest("Wrong Password");
+                return NotFound(new { passwordResponse.Error });
             }
+
             string jwt = _jwtService.CreateToken(response.Data);
             return Ok(new {jwt, response.Data});
         }

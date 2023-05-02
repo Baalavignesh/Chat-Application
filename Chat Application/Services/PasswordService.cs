@@ -6,7 +6,7 @@ namespace Chat_Application.Services
     public interface IPasswordService
     {
         void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
-        bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
+        ServiceResponse<bool> VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
     }
     public class PasswordService : IPasswordService
     {
@@ -19,12 +19,21 @@ namespace Chat_Application.Services
             }
         }
 
-        public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        public ServiceResponse<bool> VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
+            ServiceResponse<bool> response = new ServiceResponse<bool>();
             using (var hmac = new HMACSHA512(passwordSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return computedHash.SequenceEqual(passwordHash);
+                if(computedHash.SequenceEqual(passwordHash))
+                {
+                    response.Data = true;
+                }else
+                {
+                    Console.WriteLine("wrong");
+                    response.Error = "Wrong Password";
+                }
+                return response;
             }
         }
     }

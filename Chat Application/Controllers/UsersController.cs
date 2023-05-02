@@ -32,12 +32,22 @@ namespace Chat_Application.Controllers
         }
 
         // GET: api/GetChats/1
-        [HttpGet("GetMyChats/{UserId}"), Authorize]
-        public async Task<ActionResult<IEnumerable<User>>> GetMyChats(int userId)
-        {
-            var response = await _userInfoService.GetMyChats(userId);
-            return Ok(response);
-        }
+        //[HttpGet("GetMyChats/{userId}")]
+        //public async Task<ActionResult<IEnumerable<User>>> GetMyChats(int userId)
+        //{
+        //    Console.WriteLine("controller");
+        //    Console.WriteLine(userId);
+        //    var response = await _userInfoService.GetMyChats(userId);
+        //    Console.WriteLine(response.Error);
+        //    if(response.Data != null)
+        //    {
+        //        return Ok(response.Data);
+        //    }
+        //    else
+        //    {
+        //        return NotFound(response.Error);
+        //    }
+        //}
 
     }
 }

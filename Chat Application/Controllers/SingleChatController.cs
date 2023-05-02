@@ -19,7 +19,7 @@ namespace Chat_Application.Controllers
         }
 
 
-        [HttpGet("GetSingleChat/{chatId}"), Authorize]
+        [HttpGet("GetSingleChat/{chatId}")]
         public async Task<ActionResult<SingleChat>> GetSingleChat(int chatId)
         {
             var response = await _singleChatService.GetSingleChat(chatId);
