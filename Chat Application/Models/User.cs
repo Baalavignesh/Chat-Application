@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Chat_Application.Models
 {
@@ -11,11 +12,15 @@ namespace Chat_Application.Models
         public string Username { get; set; } = string.Empty;
 
         [Required]
-        public byte[] PasswordHash { get; set; }
+        [JsonIgnore]
+        public byte[] PasswordHash { get; set; } 
 
         [Required]
+        [JsonIgnore]
         public byte[] PasswordSalt { get; set; }
 
+        [Required]
+        public bool isOnline { get; set; }  
 
         public virtual ICollection<MyChats> MyChats { get; set; }
         public virtual ICollection<SingleChat> SingleChat { get; set; }

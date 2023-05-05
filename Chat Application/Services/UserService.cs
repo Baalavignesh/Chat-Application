@@ -50,6 +50,7 @@ namespace Chat_Application.Services
                 Username = username,
                 PasswordHash = PasswordHash,
                 PasswordSalt = passwordSalt,
+                isOnline = false
             };
 
 

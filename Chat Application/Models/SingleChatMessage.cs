@@ -21,6 +21,9 @@ namespace Chat_Application.Models
         [Required]
         public DateTime Timestamp { get; set; }
 
+        [Required]
+        public bool IsRead { get; set; }
+
         public virtual User User { get; set; }
         public virtual SingleChat SingleChat { get; set; }
 

@@ -30,6 +30,9 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
+builder.Services.AddDistributedMemoryCache();
+
+
 builder.Services.AddSignalR();
 
 
@@ -80,6 +83,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 

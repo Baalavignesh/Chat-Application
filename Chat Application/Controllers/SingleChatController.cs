@@ -28,7 +28,7 @@ namespace Chat_Application.Controllers
         }
 
 
-        [HttpPost("AddSingleChatMessage"), Authorize]
+        [HttpPost("AddSingleChatMessage")]
         public async Task<ActionResult<bool>> AddSingleChatMessage(NewSingleChatDto request)
         {
             await _singleChatService.AddSingleChat(request);

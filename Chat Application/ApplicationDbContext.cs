@@ -64,6 +64,12 @@ namespace Chat_Application
             .HasForeignKey(c => c.GroupSenderId)
             .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<UserSession>()
+                .HasOne(c => c.User)
+                .WithOne()
+                .HasForeignKey<UserSession>(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // MyChat
             // MyChats - SingleChat (Many to One)
             modelBuilder.Entity<MyChats>()
@@ -111,6 +117,8 @@ namespace Chat_Application
         public DbSet<Chat_Application.Models.GroupChat>? GroupChat { get; set; }
         public DbSet<Chat_Application.Models.GroupMembers>? GroupMembers { get; set; }
         public DbSet<Chat_Application.Models.GroupChatMessage>? GroupChatMessage { get; set; }
+
+        public DbSet<Chat_Application.Models.UserSession>? UserSession { get; set; }
 
 
     }

@@ -62,7 +62,7 @@ namespace Chat_Application.Controllers
             }
 
             string jwt = _jwtService.CreateToken(response.Data);
-            return Ok(new {jwt, response.Data});
+            return Ok(new {jwt, response.Data.UserId});
         }
 
 

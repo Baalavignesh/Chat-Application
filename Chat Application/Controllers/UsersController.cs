@@ -10,6 +10,7 @@ using Chat_Application.Models;
 using Chat_Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
+using Chat_Application.DTOs;
 
 namespace Chat_Application.Controllers
 {
@@ -23,6 +24,7 @@ namespace Chat_Application.Controllers
             _userInfoService = userInfoService;
         }
 
+
         // GET: api/GetAllUser
         [HttpGet("GetAllUser"), Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
@@ -31,23 +33,33 @@ namespace Chat_Application.Controllers
             return Ok(response);
         }
 
-        // GET: api/GetChats/1
-        //[HttpGet("GetMyChats/{userId}")]
-        //public async Task<ActionResult<IEnumerable<User>>> GetMyChats(int userId)
-        //{
-        //    Console.WriteLine("controller");
-        //    Console.WriteLine(userId);
-        //    var response = await _userInfoService.GetMyChats(userId);
-        //    Console.WriteLine(response.Error);
-        //    if(response.Data != null)
-        //    {
-        //        return Ok(response.Data);
-        //    }
-        //    else
-        //    {
-        //        return NotFound(response.Error);
-        //    }
-        //}
+
+        // GET: api/GetSpecificUser
+        [HttpGet("GetSpecificUser/{userId}/{username}"), Authorize]
+        public async Task<ActionResult<IEnumerable<NewChatDto>>> GetSpecificUser(string username, int userId)
+        {
+            var response = await _userInfoService.GetSpecificUser(username, userId);
+            return Ok(response);
+        }
+
+
+        //GET: api/GetChats/1
+        [HttpGet("GetMyChats/{userId}")]
+        public async Task<ActionResult<IEnumerable<User>>> GetMyChats(int userId)
+        {
+            Console.WriteLine("controller");
+            Console.WriteLine(userId);
+            var response = await _userInfoService.GetMyChats(userId);
+            Console.WriteLine(response.Error);
+            if (response.Data != null)
+            {
+                return Ok(response.Data);
+            }
+            else
+            {
+                return NotFound(response.Error);
+            }
+        }
 
     }
 }

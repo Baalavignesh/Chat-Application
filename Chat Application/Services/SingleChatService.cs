@@ -51,7 +51,8 @@ namespace Chat_Application.Services
                     SenderId = request.SenderId,
                     ParentChatId = existingSingleChat.ChatId,
                     Message = request.Message,
-                    Timestamp = DateTime.Now
+                    Timestamp = DateTime.Now,
+                    IsRead = false,
                 };
                 _context.SingleChatMessage.Add(newSingleChatMessage);
             }

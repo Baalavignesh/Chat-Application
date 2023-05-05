@@ -10,11 +10,11 @@ namespace Chat_Application.Models
         [Key]
         public int MyChatId { get; set; }
 
-        [ForeignKey("SingleChat")]
-        public int SingleChatId { get; set; }
+        [ForeignKey("SingleChat"), AllowNull]
+        public int? SingleChatId { get; set; }
 
-        [ForeignKey("GroupChat")]
-        public int GroupId { get; set; }
+        [ForeignKey("GroupChat"), AllowNull]
+        public int? GroupId { get; set; }
 
         [Required]
         [ForeignKey("User")]
