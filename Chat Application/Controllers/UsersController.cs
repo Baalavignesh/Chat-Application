@@ -27,6 +27,7 @@ namespace Chat_Application.Controllers
 
         // GET: api/GetAllUser
         [HttpGet("GetAllUser"), Authorize]
+
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
         {
             var response = await _userInfoService.GetAllUser();
@@ -44,7 +45,7 @@ namespace Chat_Application.Controllers
 
 
         //GET: api/GetChats/1
-        [HttpGet("GetMyChats/{userId}")]
+        [HttpGet("GetMyChats/{userId}"), Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetMyChats(int userId)
         {
             Console.WriteLine("controller");

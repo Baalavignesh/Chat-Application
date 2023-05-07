@@ -19,7 +19,7 @@ namespace Chat_Application.Controllers
         }
 
 
-        [HttpGet("GetSingleChat/{chatId}")]
+        [HttpGet("GetSingleChat/{chatId}"), Authorize]
         public async Task<ActionResult<SingleChat>> GetSingleChat(int chatId)
         {
             var response = await _singleChatService.GetSingleChat(chatId);
@@ -28,7 +28,7 @@ namespace Chat_Application.Controllers
         }
 
 
-        [HttpPost("AddSingleChatMessage")]
+        [HttpPost("AddSingleChatMessage"), Authorize]
         public async Task<ActionResult<bool>> AddSingleChatMessage(NewSingleChatDto request)
         {
             await _singleChatService.AddSingleChat(request);
